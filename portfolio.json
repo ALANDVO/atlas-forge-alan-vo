@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "atlas-forge-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: atlas-forge-alan-vo",
+  "workflows": [
+    "Create and import agent-authored HTML video compositions with deterministic DOM timeline and path-resolution verification",
+    "Apply in-place spatial and temporal clip overrides directly on the stage model with transactional SQLite audit history",
+    "Diagnose frame-rate bounds, simultaneous media decode concurrency, and export deterministic render manifests"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
