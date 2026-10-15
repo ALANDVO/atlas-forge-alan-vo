@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlas-forge-alan-vo"
+version = "0.1.0"
+description = "Deterministic HTML-to-video composition analyzer and timeline studio for agent-authored motion graphics."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+authors = [
+  { name = "Alan Vo", email = "alanvo@gmail.com" }
+]
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn==0.34.0",
+  "pydantic==2.10.4",
+  "httpx==0.28.1"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["backend"]
+testpaths = ["backend/tests"]
