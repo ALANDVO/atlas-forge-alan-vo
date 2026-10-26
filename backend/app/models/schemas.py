@@ -56,8 +56,15 @@ class CompositionCreateRequest(BaseModel):
     entry_path: str = Field(default="index.html", min_length=1, max_length=240)
     scaffold_root_path: str = Field(default="index.html", min_length=1, max_length=240)
     html_source: str = Field(..., min_length=16)
+    composition_attr_id: str = Field(default="composition", min_length=1, max_length=120)
+    width: int = Field(default=1920, ge=1, le=7680)
+    height: int = Field(default=1080, ge=1, le=4320)
+    fps: int = Field(default=30, ge=1, le=120)
+    duration_sec: float = Field(default=10.0, gt=0.0, le=3600.0)
+    total_frames: int = Field(default=300, ge=1, le=432000)
+    readiness_score: int = Field(default=0, ge=0, le=100)
 
-    @field_validator("title", "entry_path", "scaffold_root_path")
+    @field_validator("title", "entry_path", "scaffold_root_path", "composition_attr_id")
     @classmethod
     def strip_non_empty(cls, value: str) -> str:
         cleaned = value.strip()
@@ -77,13 +84,18 @@ class ClipOverrideRequest(BaseModel):
     opacity: float | None = Field(default=None, ge=0.0, le=1.0)
 
 
+class ClipOverrideResponse(BaseModel):
+    clip: ClipModel
+    applied_fields: list[str]
+
+
 class AuditEventModel(BaseModel):
     id: int
     composition_id: str
     action: str
     actor: str
     summary: str
-    details: dict[str, Any]
+    details_json: str
     created_at: str
 
 

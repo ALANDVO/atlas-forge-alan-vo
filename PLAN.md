@@ -10,12 +10,16 @@ core-composition-studio
 
 ### core-composition-studio — Deterministic HTML/Timeline Composition Engine & Visual Studio
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - Create, import, filter, paginate, and inspect HTML/timeline video compositions stored in SQLite with transactional audit logs
 - Deterministic DOM/timeline static analyzer and frame-step simulation engine computing track bounds, concurrency overlaps, bit-depth quantization diagnostics, and export readiness
 - React + TypeScript studio UI with live composition creation, timeline diagnostics, in-place element property overrides, and JSON/manifest export
+
+Implementation: `backend/app/main.py`, `backend/app/api/compositions.py`, `backend/app/api/clips.py`, `backend/app/api/diagnostics.py`, `backend/app/api/health.py`, `backend/app/core/database.py`, `backend/app/models/schemas.py`
+
+Tests: `backend/tests/test_compositions.py`, `backend/tests/test_clips.py`
 
 ### gpu-capture-diagnostics — WSL2 / Multi-Worker Capture & ProRes 10-bit Precision Analyzer
 
