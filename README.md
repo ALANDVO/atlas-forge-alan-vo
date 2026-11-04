@@ -1,4 +1,4 @@
-# Atlas Forge — alan-vo
+# Atlas Forge — alan-vo — Alan Vo
 
 > Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
 

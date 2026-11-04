@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-import json
 import re
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Optional, Literal
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -23,8 +22,10 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def analyze_html_composition(html_source: str) -> tuple[int, list[ConcurrencyWindow], list[DiagnosticIssue]]:
-    """Static analysis of HTML composition for timeline diagnostics."""
+def analyze_html_composition(html_source: str, fps: int = 30) -> tuple[int, list[ConcurrencyWindow], list[DiagnosticIssue], bool]:
+    """Static analysis of HTML composition for timeline diagnostics.
+    Returns (readiness_score, concurrency_windows, issues, has_gsap_timeline)
+    """
     issues: list[DiagnosticIssue] = []
     concurrency_windows: list[ConcurrencyWindow] = []
 
@@ -35,8 +36,7 @@ def analyze_html_composition(html_source: str) -> tuple[int, list[ConcurrencyWin
     video_pattern = r'<video[^>]*>'
     video_matches = list(re.finditer(video_pattern, html_source, re.IGNORECASE))
 
-    # Simple frame-based concurrency analysis (30 fps assumption)
-    fps = 30
+    # Frame-based concurrency analysis using provided fps
     max_concurrent = 0
     active_intervals: list[tuple[float, float, str]] = []
 
@@ -135,13 +135,7 @@ def analyze_html_composition(html_source: str) -> tuple[int, list[ConcurrencyWin
             score -= 5
     score = max(0, score)
 
-    status: Literal["ready", "warning", "blocked"] = "ready"
-    if any(i.severity == "error" for i in issues):
-        status = "blocked"
-    elif any(i.severity == "warning" for i in issues):
-        status = "warning"
-
-    return score, concurrency_windows, issues
+    return score, concurrency_windows, issues, has_gsap_timeline
 
 
 @router.get("/{comp_id}", response_model=CompositionDiagnostics)
@@ -164,14 +158,14 @@ async def get_diagnostics(comp_id: str):
         duration_sec = row[4]
         total_frames = row[5]
 
-    readiness_score, concurrency_windows, issues = analyze_html_composition(html_source)
+    readiness_score, concurrency_windows, issues, has_gsap_timeline = analyze_html_composition(html_source, fps)
 
     return CompositionDiagnostics(
         composition_id=comp_id,
         readiness_score=readiness_score,
         status="ready" if readiness_score >= 80 else "warning" if readiness_score >= 50 else "blocked",
         entry_path_mismatch=any(i.code == "ENTRY_PATH_MISMATCH" for i in issues),
-        has_gsap_timeline=any(i.code == "NO_GSAP_TIMELINE" for i in issues) is False,
+        has_gsap_timeline=has_gsap_timeline,
         max_concurrent_videos=max((w.active_video_count for w in concurrency_windows), default=0),
         peak_concurrency_windows=concurrency_windows,
         issues=issues,
