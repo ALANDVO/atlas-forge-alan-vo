@@ -249,7 +249,9 @@ async def get_composition(comp_id: str):
 
     # Simple diagnostics computation
     from app.api.diagnostics import analyze_html_composition
-    readiness_score, concurrency_windows, issues = analyze_html_composition(html_source)
+    # Get fps from composition row (index 8)
+    fps = row[8]
+    readiness_score, concurrency_windows, issues, has_gsap_timeline = analyze_html_composition(html_source, fps)
 
     from app.models.schemas import CompositionDiagnostics
     diagnostics = CompositionDiagnostics(
@@ -257,7 +259,7 @@ async def get_composition(comp_id: str):
         readiness_score=readiness_score,
         status="ready" if readiness_score >= 80 else "warning" if readiness_score >= 50 else "blocked",
         entry_path_mismatch=any(i.code == "ENTRY_PATH_MISMATCH" for i in issues),
-        has_gsap_timeline=any(i.code == "NO_GSAP_TIMELINE" for i in issues) is False,
+        has_gsap_timeline=has_gsap_timeline,
         max_concurrent_videos=max((w.active_video_count for w in concurrency_windows), default=0),
         peak_concurrency_windows=concurrency_windows,
         issues=issues,
