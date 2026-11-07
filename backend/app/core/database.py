@@ -85,6 +85,16 @@ CREATE TABLE IF NOT EXISTS audit_events (
     details_json TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS composition_diagnostics (
+    composition_id TEXT PRIMARY KEY,
+    readiness_score INTEGER NOT NULL,
+    issues_json TEXT NOT NULL,
+    concurrency_windows_json TEXT NOT NULL,
+    has_gsap_timeline INTEGER NOT NULL DEFAULT 0,
+    computed_at TEXT NOT NULL,
+    FOREIGN KEY (composition_id) REFERENCES compositions(id) ON DELETE CASCADE
+);
 """
 
 
