@@ -36,3 +36,7 @@ Partial code published for continued development. Known issues: STATUS.md.
 - Transactional audit logging
 - 10 passing integration tests
 - Demo mode guard (refuses startup in production with demo_mode=true)
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

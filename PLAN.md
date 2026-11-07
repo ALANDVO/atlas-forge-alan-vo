@@ -46,3 +46,6 @@ Acceptance:
 - Keycloak OIDC authorization-code + PKCE + state/nonce flow with viewer, analyst, and admin role enforcement
 - Explicit localhost-only demo mode guard that refuses startup in production environments
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

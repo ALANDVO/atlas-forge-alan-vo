@@ -42,3 +42,7 @@ python -m pytest tests/ -v
 - **Tests**: 10 passing tests with isolated test database
 
 Maintainer: Alan Vo <alanvo@gmail.com>
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
