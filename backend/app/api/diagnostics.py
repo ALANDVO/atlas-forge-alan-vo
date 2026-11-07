@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from datetime import datetime, timezone
 from typing import Optional, Literal
@@ -159,6 +160,32 @@ async def get_diagnostics(comp_id: str):
         total_frames = row[5]
 
     readiness_score, concurrency_windows, issues, has_gsap_timeline = analyze_html_composition(html_source, fps)
+
+    # Persist diagnostics results
+    issues_json = json.dumps([issue.model_dump() for issue in issues])
+    concurrency_windows_json = json.dumps([window.model_dump() for window in concurrency_windows])
+
+    with get_connection(settings.db_path) as conn:
+        # Store diagnostics
+        conn.execute(
+            """INSERT OR REPLACE INTO composition_diagnostics 
+               (composition_id, readiness_score, issues_json, concurrency_windows_json, has_gsap_timeline, computed_at)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (comp_id, readiness_score, issues_json, concurrency_windows_json, 1 if has_gsap_timeline else 0, _now()),
+        )
+        # Update composition readiness_score
+        conn.execute(
+            "UPDATE compositions SET readiness_score = ?, updated_at = ? WHERE id = ?",
+            (readiness_score, _now(), comp_id),
+        )
+        # Add audit event
+        conn.execute(
+            """INSERT INTO audit_events (composition_id, action, actor, summary, details_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (comp_id, "diagnostics_computed", "system", "Computed composition diagnostics",
+             json.dumps({"readiness_score": readiness_score, "issue_count": len(issues), "has_gsap_timeline": has_gsap_timeline}), _now()),
+        )
+        conn.commit()
 
     return CompositionDiagnostics(
         composition_id=comp_id,

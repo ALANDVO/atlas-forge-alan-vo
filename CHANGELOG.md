@@ -1,8 +1,18 @@
 # Changelog
 
+## 1.3.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+
+### Added (this round)
+- Persisted diagnostics storage in `composition_diagnostics` table
+- Diagnostics endpoint now stores results (readiness_score, issues, concurrency_windows, has_gsap_timeline)
+- Composition `readiness_score` updated on diagnostics computation
+- `diagnostics_computed` audit event for traceability
 
 ## 1.1.0 — work-in-progress checkpoint
 
