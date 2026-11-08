@@ -71,28 +71,32 @@ def analyze_html_composition(html_source: str, fps: int = 30) -> tuple[int, list
         current_count = 0
         current_clips: list[str] = []
         window_start_frame = 0
+        prev_time = 0.0
 
         for time, delta, eid in events:
             frame = int(time * fps)
 
+            # When count changes, close previous window and start new one
+            if current_count > 0 and time > prev_time:
+                concurrency_windows.append(ConcurrencyWindow(
+                    start_frame=window_start_frame,
+                    end_frame=frame,
+                    active_video_count=current_count,
+                    active_clip_ids=current_clips.copy(),
+                    docker_stall_risk=current_count > 2,
+                ))
+                window_start_frame = frame
+
             if delta == 1:
-                if current_count == 0:
-                    window_start_frame = frame
                 current_count += 1
                 current_clips.append(eid)
                 max_concurrent = max(max_concurrent, current_count)
             else:
-                if current_count > 0:
-                    concurrency_windows.append(ConcurrencyWindow(
-                        start_frame=window_start_frame,
-                        end_frame=frame,
-                        active_video_count=current_count,
-                        active_clip_ids=current_clips.copy(),
-                        docker_stall_risk=current_count > 2,
-                    ))
                 current_count = max(0, current_count - 1)
                 if eid in current_clips:
                     current_clips.remove(eid)
+
+            prev_time = time
 
     # Check for entry path mismatch indicators
     entry_path_mismatch = "entry" not in html_source.lower() and "index.html" not in html_source.lower()
