@@ -12,6 +12,7 @@ from app.core.database import get_connection, get_settings
 from app.models.schemas import (
     AuditEventModel,
     CompositionCreateRequest,
+    CompositionImportRequest,
     CompositionDetail,
     CompositionSummary,
     PaginatedCompositions,

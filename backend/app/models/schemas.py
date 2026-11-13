@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -72,6 +72,28 @@ class CompositionCreateRequest(BaseModel):
             raise ValueError("Field must not be blank")
         return cleaned
 
+
+class CompositionImportRequest(BaseModel):
+    file_path: str = Field(..., description="Path to the HTML file to import")
+
+    title: Optional[str] = None
+    entry_path: Optional[str] = None
+    scaffold_root_path: Optional[str] = None
+    composition_attr_id: Optional[str] = None
+    width: Optional[int] = None
+    height: Optional[int] = None
+    fps: Optional[int] = None
+    duration_sec: Optional[float] = None
+    total_frames: Optional[int] = None
+    readiness_score: Optional[int] = None
+
+    @field_validator("file_path")
+    @classmethod
+    def validate_file_path(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not cleaned:
+            raise ValueError("file_path must not be blank")
+        return cleaned
 
 class ClipOverrideRequest(BaseModel):
     label: str | None = Field(default=None, min_length=1, max_length=200)
