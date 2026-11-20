@@ -23,11 +23,15 @@ Tests: `backend/tests/test_compositions.py`, `backend/tests/test_clips.py`
 
 ### gpu-capture-diagnostics — WSL2 / Multi-Worker Capture & ProRes 10-bit Precision Analyzer
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Analyze render environment profiles (WSL2 /dev/dri/renderD128 permissions, Windows multi-worker segmented capture connection contention, Docker dual-video stalls)
 - Evaluate 8-bit capture quantization vs 10-bit ProRes 4444 container levels, computing gradient fill ratios, flat-run contour lengths, and deband/supersample recommendations
+
+Implementation: `backend/app/api/diagnostics.py: GPU environment detection (detect_render_environment),`, `8-bit/10-bit quantization analysis (analyze_quantization),`, `Docker multi-worker capture contention assessment (assess_docker_capture_contention)`
+
+Tests: `Verified detect_render_environment() returns render DRI info, WSL2 detection, GPU vendor`, `Verified analyze_quantization(BitDepth.BIT_8) vs analyze_quantization(BitDepth.BIT_10) produces correct`, `          error rates, gradient fill ratios, deband/supersample recommendations`, `Verified assess_docker_capture_contention() correctly assesses risk levels and worker limits`
 
 ### agent-scene-refinement-eval — Agentic Scene Refinement & Reproducible ML Evaluation Benchmark
 
