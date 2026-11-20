@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.5.1 — work-in-progress checkpoint
+
+### Added (this round)
+- GPU capture diagnostics module in `backend/app/api/diagnostics.py`:
+  - `detect_render_environment()`: WSL2 /dev/dri/renderD128 permission detection, GPU vendor identification, WSL2 distro detection, Docker container awareness
+  - `analyze_quantization()`: 8-bit vs 10-bit ProRes 4444 quantization error analysis, gradient fill ratios, flat-run contour length computation, debanding and supersampling recommendations
+  - `assess_docker_capture_contention()`: Multi-worker capture connection contention risk assessment with recommended worker count limits
+
+### Fixed
+- None (new feature implementation)
+
+Known issues: STATUS.md.
+
 ## 1.5.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
