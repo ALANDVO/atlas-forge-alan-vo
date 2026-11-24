@@ -28,7 +28,7 @@
     {
       "id": "gpu-capture-diagnostics",
       "title": "WSL2 / Multi-Worker Capture & ProRes 10-bit Precision Analyzer",
-      "status": "in_progress",
+      "status": "done",
       "acceptance": [
         "Analyze render environment profiles (WSL2 /dev/dri/renderD128 permissions, Windows multi-worker segmented capture connection contention, Docker dual-video stalls)",
         "Evaluate 8-bit capture quantization vs 10-bit ProRes 4444 container levels, computing gradient fill ratios, flat-run contour lengths, and deband/supersample recommendations"

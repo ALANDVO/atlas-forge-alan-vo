@@ -350,7 +350,11 @@ def assess_docker_capture_contention(
         max_recommended = 3
 
     if has_dual_video:
-        risk_level = max(risk_level, "high")
+        # Upgrade risk to high when dual-video stall risk is present
+        # Using numeric comparison to avoid lexicographic string comparison bugs
+        # ("medium" > "high" lexicographically since 'm' > 'h', so max() would be incorrect)
+        if risk_level != "high":
+            risk_level = "high"
         max_recommended = min(max_recommended, 2)
 
     return {

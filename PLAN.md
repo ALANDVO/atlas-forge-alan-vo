@@ -23,7 +23,7 @@ Tests: `backend/tests/test_compositions.py`, `backend/tests/test_clips.py`
 
 ### gpu-capture-diagnostics — WSL2 / Multi-Worker Capture & ProRes 10-bit Precision Analyzer
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - Analyze render environment profiles (WSL2 /dev/dri/renderD128 permissions, Windows multi-worker segmented capture connection contention, Docker dual-video stalls)
