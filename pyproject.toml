@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "atlas-forge-alan-vo"
-version = "1.6.0"
+version = "1.7.0"
 description = "Deterministic HTML-to-video composition analyzer and timeline studio for agent-authored motion graphics."
 readme = "README.md"
 license = { text = "MIT" }
